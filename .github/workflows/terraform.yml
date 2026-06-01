@@ -29,6 +29,12 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -out=tfplan
 
+      - name: Upload plan file
+        uses: actions/upload-artifact@v3
+        with:
+          name: tfplan
+          path: tfplan
+
   apply:
     needs: terraform
     runs-on: ubuntu-latest
@@ -49,6 +55,11 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+
+      - name: Download plan file
+        uses: actions/download-artifact@v3
+        with:
+          name: tfplan
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
